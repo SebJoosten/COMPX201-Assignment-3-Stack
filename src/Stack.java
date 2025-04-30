@@ -4,8 +4,13 @@
 public class Stack {
 
     private node root;
+    // Size tally so we don't have to keep checking it
+    private int size;
     boolean debugPrint = true;
 
+    public Stack() {
+        size = 0;
+    }
 
     /**
      * Used to push to the top of the stack
@@ -13,13 +18,19 @@ public class Stack {
      */
     public void push(String data){
 
-        if(data == null){
+        if(data == null || data.isEmpty()){
             System.out.println("Nothing to push");
             return;
         }
 
+        // Check size
+        if (size == Integer.MAX_VALUE) {
+            System.out.println("ERROR Stack is full");
+        }
+
         node top = new node(data,root);
         root = top;
+        size++;
 
     }
 
@@ -89,14 +100,19 @@ public class Stack {
         // Root null check
         if(root == null) {
             if(debugPrint) System.out.println("ERROR Nothing to count");
+            size = 0; // Just in case
             return 0;
         }
 
+
+        size = root.count();
         return root.count();
 
     }
 
-
+    /**
+     * This will print out all the data in this stack in a nicely formatted list
+     */
     public void dump(){
 
         // Null check
@@ -172,7 +188,7 @@ public class Stack {
          */
         private int countRecursive(int i){
 
-            if (root.next == null){
+            if (next == null){
               return  i + 1;
             }
             return next.countRecursive(i+1);
@@ -191,9 +207,9 @@ public class Stack {
          */
         private void printRecursive(int i){
 
-            if (next == null) return;
+            System.out.println(String.format("% 3d. -> %s", i, data));
 
-            System.out.println(i + ". -> " + data );
+            if (next == null) return;
 
             next.printRecursive(i+1);
 
